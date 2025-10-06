@@ -1,14 +1,11 @@
-import asyncio
+# server.py
+from fastmcp import FastMCP
 
-async def main():
-    from fastmcp import FastMCP
-    mcp = FastMCP(name="My Server")
+mcp = FastMCP("My MCP Server")
 
-    @mcp.tool
-    def hello(name: str) -> str:
-        return f"Hello, {name}!"
-
-    await mcp.run_async()
+@mcp.tool
+def greet(name: str) -> str:
+    return f"Hello, {name}!"
 
 if __name__ == "__main__":
-    asyncio.run(main())
+     mcp.run()
