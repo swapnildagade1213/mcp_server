@@ -4,6 +4,7 @@ from exchangelib import  OAuth2Credentials, Configuration, Account, IMPERSONATIO
 from exchangelib.protocol import BaseProtocol, NoVerifyHTTPAdapter
 from msal import ConfidentialClientApplication
 from datetime import datetime, timedelta, timezone
+import json
 
 BaseProtocol.HTTP_ADAPTER = NoVerifyHTTPAdapter()
 
