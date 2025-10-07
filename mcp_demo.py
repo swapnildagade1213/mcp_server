@@ -10,13 +10,7 @@ import dotenv
 dotenv.load_dotenv()
 mcp = FastMCP("My MCP Server")
 
-TEST_KEY = os.getenv("TEST_KEY")
 
-# Fallback to legacy environment variable names if new ones don't exist
-if not TEST_KEY:
-    print("TEST_KEY not found")
-else:
-    print("TEST_KEY found : " , TEST_KEY )
 
 @mcp.tool()
 def get_branches(username: str , token: str , repo_name : str) -> list:
@@ -97,7 +91,7 @@ async def decode_jwttoken(jwt_token: str) -> str:
     return '\n'.join([f"{key}: {value}" for key, value in decoded.items()])
     
 @mcp.tool()
-async def get_weather(city: str, api_key: str) -> Dict[str, Any]:
+async def get_weather(city: str) -> Dict[str, Any]:
     """Get weather information for a city.
     
     Args:
@@ -107,6 +101,9 @@ async def get_weather(city: str, api_key: str) -> Dict[str, Any]:
         Weather data for the requested city 
     """
     units = "metric"
+    api_key = os.getenv("API_KEY")
+    if not api_key:
+        print("api_key not found")
         
     url = (
         f"https://api.openweathermap.org/data/2.5/weather"
