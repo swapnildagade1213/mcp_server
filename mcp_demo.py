@@ -28,7 +28,7 @@ async def decode_jwttoken(jwt_token: str) -> str:
     return '\n'.join([f"{key}: {value}" for key, value in decoded.items()])
     
 @mcp.tool()
-async def get_weather(city: str) -> Dict[str, Any]:
+async def get_weather(city: str, api_key: str) -> Dict[str, Any]:
     """Get weather information for a city.
     
     Args:
@@ -37,7 +37,6 @@ async def get_weather(city: str) -> Dict[str, Any]:
     Returns:
         Weather data for the requested city 
     """
-    api_key = "9714c902c784730338c95bd3140cc6ed"
     units = "metric"
         
     url = (
