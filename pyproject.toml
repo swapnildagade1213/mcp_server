@@ -9,5 +9,7 @@ keywords = ["mcp", "llm", "alpic", "python"]
 dependencies = [
     "black>=25.1.0",
     "mcp",
-    "PyJWT"
+    "PyJWT",
+    "exchangelib",
+    "msal"
 ]
