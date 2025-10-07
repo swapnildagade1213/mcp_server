@@ -1,5 +1,5 @@
 # meeting_mcp.py
-from fastmcp import FastMCP
+from fastmcp import FastMCP,Context 
 from exchangelib import  OAuth2Credentials, Configuration, Account, IMPERSONATION,Identity, Q
 from exchangelib.protocol import BaseProtocol, NoVerifyHTTPAdapter
 from msal import ConfidentialClientApplication
