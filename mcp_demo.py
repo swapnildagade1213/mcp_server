@@ -10,6 +10,9 @@ import dotenv
 dotenv.load_dotenv()
 mcp = FastMCP("My MCP Server")
 
+@mcp.get("/hello")
+def hello():
+    return {"message": "Hello from FastMCP"}
 
 
 @mcp.tool()
