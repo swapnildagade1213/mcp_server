@@ -10,10 +10,6 @@ import dotenv
 dotenv.load_dotenv()
 mcp = FastMCP("My MCP Server")
 
-@mcp.get("/hello")
-def hello():
-    return {"message": "Hello from FastMCP"}
-
 
 @mcp.tool()
 def get_branches(username: str , token: str , repo_name : str) -> list:
