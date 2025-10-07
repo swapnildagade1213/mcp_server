@@ -8,7 +8,7 @@ import jwt
 mcp = FastMCP("My MCP Server")
 
 @mcp.tool()
-def get_repositories(username, token):
+def get_repositories(username: str , token: str ) -> str:
     """
     Fetch GitHub repositories for a given username.
     
