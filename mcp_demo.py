@@ -14,7 +14,7 @@ async def get_weather(city: str) -> Dict[str, Any]:
         city: Any city name, not limited to Indian cities
         
     Returns:
-        Weather data for the requested city
+        Weather data for the requested city 
     """
     api_key = "9714c902c784730338c95bd3140cc6ed"
     units = "metric"
