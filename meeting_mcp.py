@@ -3,6 +3,8 @@ from fastmcp import FastMCP,Context
 from exchangelib import  OAuth2Credentials, Configuration, Account, IMPERSONATION,Identity, Q
 from exchangelib.protocol import BaseProtocol, NoVerifyHTTPAdapter
 from msal import ConfidentialClientApplication
+from datetime import datetime, timedelta, timezone
+
 BaseProtocol.HTTP_ADAPTER = NoVerifyHTTPAdapter()
 
 mcp = FastMCP("My MCP Server")
