@@ -6,6 +6,36 @@ from datetime import datetime
 import jwt
 
 mcp = FastMCP("My MCP Server")
+
+@mcp.tool()
+def get_repositories(username, token):
+    """
+    Fetch GitHub repositories for a given username.
+    
+    Args:
+        username (str): GitHub username
+        token (str): GitHub authentication token
+        
+    Returns:
+        list: List of repositories data or None if request fails
+    """
+    # GitHub API endpoint
+    url = f"https://api.github.com/users/{username}/repos"
+    
+    # Make request
+    response = requests.get(url, auth=(username, token), verify=False)
+    
+    if response.status_code == 200:
+        data = response.json()
+        repo_urls = []
+        for repo in data:
+            repo_urls.append(repo["html_url"])  # Using html_url instead of API url
+        return repo_urls
+    else:
+        return(f"Failed to retrieve repositories: {response.status_code}")
+
+
+
 @mcp.tool()
 async def decode_jwttoken(jwt_token: str) -> str:
     """Decode a JWT token without signature verification.
