@@ -3,9 +3,30 @@ from fastmcp import FastMCP
 import requests 
 from typing import Any, Dict
 from datetime import datetime
+import jwt
 
 mcp = FastMCP("My MCP Server")
-
+@mcp.tool()
+async def decode_jwttoken(jwt_token: str) -> str:
+    """Decode a JWT token without signature verification.
+    
+    This function decodes the provided JWT token and returns its contents as a formatted string.
+    Note that signature verification is intentionally disabled, so this should only be used for
+    inspection purposes, not for authentication validation.
+    
+    Args:
+        jwt_token: A string containing the JWT token to be decoded.
+        
+    Returns:
+        str: A formatted string with each claim on a new line in "key: value" format.
+        
+    Raises:
+        jwt.exceptions.DecodeError: If the token is malformed or invalid.
+    """
+    # Decode without verifying the signature
+    decoded = jwt.decode(jwt_token, options={"verify_signature": False})
+    return '\n'.join([f"{key}: {value}" for key, value in decoded.items()])
+    
 @mcp.tool()
 async def get_weather(city: str) -> Dict[str, Any]:
     """Get weather information for a city.
