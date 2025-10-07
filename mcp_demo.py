@@ -8,6 +8,34 @@ import jwt
 mcp = FastMCP("My MCP Server")
 
 @mcp.tool()
+def get_branches(username: str , token: str , repo_name : str) -> list:
+    """
+    Fetch GitHub branches for a given repository.
+    
+    Args:
+        username (str): GitHub username
+        token (str): GitHub authentication token
+        repo_name (str): Repository name
+        
+    Returns:
+        list: List of branches data or None if request fails
+    """
+    # GitHub API endpoint
+    url = f"https://api.github.com/repos/{username}/{repo_name}/branches"
+    
+    # Make request
+    response = requests.get(url, auth=(username, token), verify=False)
+    
+    if response.status_code == 200:
+        data = response.json()
+        repo_urls = []
+        for repo in data:
+            repo_urls.append(repo["name"])  # Using html_url instead of API url
+        return repo_urls
+    else:
+        return(f"Failed to retrieve branches: {response.status_code}")
+        
+@mcp.tool()
 def get_repositories(username: str , token: str ) -> list:
     """
     Fetch GitHub repositories for a given username.
