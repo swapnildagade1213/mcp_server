@@ -100,6 +100,8 @@ async def get_weather(city: str) -> Dict[str, Any]:
     Returns:
         Weather data for the requested city 
     """
+
+    dotenv.load_dotenv()
     units = "metric"
     api_key = os.getenv("API_KEY")
     if not api_key:
