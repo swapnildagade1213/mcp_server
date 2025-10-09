@@ -1,15 +1,15 @@
 [project]
-name = "mcp-server-template"
+name = "swapnil-MCP-Demo"
 version = "0.1.0"
 description = "Python MCP Server template"
 readme = "README.md"
 requires-python = ">=3.13"
 authors = [{ name = "SWAPNIL DAGADE" }]
-keywords = ["mcp", "llm", "alpic", "python"]
+keywords = ["mcp", "llm", "python"]
 dependencies = [
-    "black>=25.1.0",
     "mcp",
     "PyJWT",
     "exchangelib",
-    "msal"
+    "msal",
+    "cryptography"
 ]
