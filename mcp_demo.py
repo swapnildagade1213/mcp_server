@@ -54,16 +54,22 @@ def get_companycode()-> str:
 
 @mcp.tool()
 def fetch_clientId(saltdata : str, keydata : str)-> str:
-    try:
-        cid = "Z0FBQUFBQm83SlZyeURnNFY3UkZPb1ZjWDd5MThaVWc5WG43VEZNSVZpdVVzR2JMOEFKUWl3Y0lmcXg0T1ByWXpRVExEOFdnNEJ2TXZadmVwTFhjcWgzLVdVb1JONkl3YU5LZEhxMjEtbkxDYTdIaGZmRVBZZm9tckZMWWRIQmJFaloyYktzdXVVMWI="
-        encrypted_data = base64.urlsafe_b64decode(cid)
-        salt = base64.urlsafe_b64decode(saltdata)
-        key, _ = generate_key_from_password(keydata, salt)
-        decrypted_clientId = decrypt_text(encrypted_data, key)
-        return decrypted_clientId
-    except Exception as e:
-        return "Decryption error"
-
+     """
+    Fetch client id
+    
+    Args:
+        saltdata (str): saltdata
+        keydata (str): keydata      
+        
+    Returns:
+        str: client id
+    """
+    cid = "Z0FBQUFBQm83SlZyeURnNFY3UkZPb1ZjWDd5MThaVWc5WG43VEZNSVZpdVVzR2JMOEFKUWl3Y0lmcXg0T1ByWXpRVExEOFdnNEJ2TXZadmVwTFhjcWgzLVdVb1JONkl3YU5LZEhxMjEtbkxDYTdIaGZmRVBZZm9tckZMWWRIQmJFaloyYktzdXVVMWI="
+    encrypted_data = base64.urlsafe_b64decode(cid)
+    salt = base64.urlsafe_b64decode(saltdata)
+    key, _ = generate_key_from_password(keydata, salt)
+    decrypted_clientId = decrypt_text(encrypted_data, key)
+    return decrypted_clientId
 
 @mcp.tool()
 def get_branches(username: str , token: str , repo_name : str) -> list:
