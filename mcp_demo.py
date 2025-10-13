@@ -41,6 +41,10 @@ def decrypt_text(encrypted_text, key):
     return decrypted_text.decode()
 
 @mcp.tool()
+def get_MyName()-> str:
+    return "$w@Pn!L"
+
+@mcp.tool()
 def get_ClientId(salt_b64 : str, password : str)-> str:
     """
     Fetch ClientId from given salt and password
