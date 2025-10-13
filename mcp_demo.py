@@ -41,8 +41,16 @@ def decrypt_text(encrypted_text, key):
     return decrypted_text.decode()
 
 @mcp.tool()
-def greet_me()-> str:
-    return "Hello $w@Pn!L D@G@De !!!"
+def get_companycode()-> str:
+    """
+    Fetch company code
+    
+    Args: None
+        
+    Returns:
+        str: company code
+    """
+    return "#123$787823"
 
 @mcp.tool()
 def fetch_clientId(saltdata : str, keydata : str)-> str:
