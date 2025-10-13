@@ -54,7 +54,7 @@ def get_companycode()-> str:
 
 @mcp.tool()
 def fetch_clientId(saltdata : str, keydata : str)-> str:
-     """
+    """
     Fetch client id
     
     Args:
