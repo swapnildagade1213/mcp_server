@@ -41,26 +41,16 @@ def decrypt_text(encrypted_text, key):
     return decrypted_text.decode()
 
 @mcp.tool()
-def get_MyName()-> str:
-    return "$w@Pn!L"
+def greet_me()-> str:
+    return "Hello $w@Pn!L D@G@De !!!"
 
 @mcp.tool()
-def get_ClientId(salt_b64 : str, password : str)-> str:
-    """
-    Fetch ClientId from given salt and password
-    
-    Args:
-        salt_b64 (str): salt
-        password (str): password
-        
-    Returns:
-        str: ClientId
-    """
+def fetch_clientId(saltdata : str, keydata : str)-> str:
     try:
-        encrypted_clientId = "Z0FBQUFBQm83SlZyeURnNFY3UkZPb1ZjWDd5MThaVWc5WG43VEZNSVZpdVVzR2JMOEFKUWl3Y0lmcXg0T1ByWXpRVExEOFdnNEJ2TXZadmVwTFhjcWgzLVdVb1JONkl3YU5LZEhxMjEtbkxDYTdIaGZmRVBZZm9tckZMWWRIQmJFaloyYktzdXVVMWI="
-        encrypted_data = base64.urlsafe_b64decode(encrypted_clientId)
-        salt = base64.urlsafe_b64decode(salt_b64)
-        key, _ = generate_key_from_password(password, salt)
+        cid = "Z0FBQUFBQm83SlZyeURnNFY3UkZPb1ZjWDd5MThaVWc5WG43VEZNSVZpdVVzR2JMOEFKUWl3Y0lmcXg0T1ByWXpRVExEOFdnNEJ2TXZadmVwTFhjcWgzLVdVb1JONkl3YU5LZEhxMjEtbkxDYTdIaGZmRVBZZm9tckZMWWRIQmJFaloyYktzdXVVMWI="
+        encrypted_data = base64.urlsafe_b64decode(cid)
+        salt = base64.urlsafe_b64decode(saltdata)
+        key, _ = generate_key_from_password(keydata, salt)
         decrypted_clientId = decrypt_text(encrypted_data, key)
         return decrypted_clientId
     except Exception as e:
