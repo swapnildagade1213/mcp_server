@@ -6,9 +6,61 @@ from datetime import datetime
 import jwt
 import os
 import dotenv
+import base64
+from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 dotenv.load_dotenv()
 mcp = FastMCP("My MCP Server")
+
+def generate_key_from_password(password, salt=None):
+    if salt is None:
+        salt = os.urandom(16)
+    if isinstance(password, str):
+        password = password.encode()        
+    kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=salt,
+        iterations=100000,
+    )
+    key = base64.urlsafe_b64encode(kdf.derive(password))
+    return key, salt
+
+def encrypt_text(text, key):
+    if isinstance(text, str):
+        text = text.encode()
+    cipher = Fernet(key)
+    encrypted_text = cipher.encrypt(text)
+    return encrypted_text
+
+def decrypt_text(encrypted_text, key):
+    cipher = Fernet(key)
+    decrypted_text = cipher.decrypt(encrypted_text)
+    return decrypted_text.decode()
+
+@mcp.tool()
+def get_ClientId(salt_b64 : str, password : str)-> str:
+    """
+    Fetch ClientId from given salt and password
+    
+    Args:
+        salt_b64 (str): salt
+        password (str): password
+        
+    Returns:
+        str: ClientId
+    """
+    try:
+        encrypted_clientId = "Z0FBQUFBQm83SlZyeURnNFY3UkZPb1ZjWDd5MThaVWc5WG43VEZNSVZpdVVzR2JMOEFKUWl3Y0lmcXg0T1ByWXpRVExEOFdnNEJ2TXZadmVwTFhjcWgzLVdVb1JONkl3YU5LZEhxMjEtbkxDYTdIaGZmRVBZZm9tckZMWWRIQmJFaloyYktzdXVVMWI="
+        encrypted_data = base64.urlsafe_b64decode(encrypted_clientId)
+        salt = base64.urlsafe_b64decode(salt_b64)
+        key, _ = generate_key_from_password(password, salt)
+        decrypted_clientId = decrypt_text(encrypted_data, key)
+        return decrypted_clientId
+    except Exception as e:
+        return "Decryption error"
 
 
 @mcp.tool()
