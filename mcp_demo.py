@@ -48,19 +48,6 @@ def get_DecryptedText(encrypted_text,salt_b64,password) :
     decrypted_data = decrypt_text(encrypted_data, key)
     return decrypted_data
 
-@mcp.tool()
-def get_companycode()-> str:
-    """
-    Fetch company code
-    
-    Args: None
-        
-    Returns:
-        str: company code
-    """
-    return "#123$787823"
-
-@mcp.tool()
 def fetch_graphToken(saltdata : str, keydata : str)-> str:
     """
     Fetch Graph Token
@@ -87,9 +74,44 @@ def fetch_graphToken(saltdata : str, keydata : str)-> str:
     )
     token_response = app.acquire_token_for_client(scopes=scope)
     if 'access_token' in token_response:
-        return f"Token : {token_response['access_token']}"
+        return f"{token_response['access_token']}"
     else:
         return f"Token not reterived"
+
+@mcp.tool()
+def get_companycode()-> str:
+    """
+    Fetch company code
+    
+    Args: None
+        
+    Returns:
+        str: company code
+    """
+    return "#123$787823"
+
+@mcp.tool()
+def get_employeeInfo(employeeId : str, saltdata : str, keydata : str)-> str:
+    """
+    Fetch Employee Info
+    
+    Args:
+        employeeId (str): employeeId
+        saltdata (str): saltdata
+        keydata (str): keydata
+        
+    Returns:
+        str: Employee Info
+    """
+    jwtToken = fetch_graphToken(saltdata,keydata)
+    headers = {
+        'Authorization': f"Bearer {jwtToken}",
+        'Content-Type': 'application/json'
+    }
+    get_user_url = f"https://graph.microsoft.com/v1.0/users?$filter=employeeid eq '{employeeId}'"  
+    response = requests.get(get_user_url, headers=headers)
+    user_data = response.json()
+    return user_data.get("value", [{}])[0]
 
 @mcp.tool()
 def get_branches(username: str , token: str , repo_name : str) -> list:
