@@ -92,6 +92,40 @@ def get_companycode()-> str:
     return "#123$787823"
 
 @mcp.tool()
+def get_employeePresence(employeeId : str, saltdata : str, keydata : str)-> Dict[str, Any]:
+    """
+    Fetch Employee Info
+    
+    Args:
+        employeeId (str): employeeId
+        saltdata (str): saltdata
+        keydata (str): keydata
+        
+    Returns:
+        str: Employee Info
+    """
+    jwtToken = fetch_graphToken(saltdata,keydata)
+    headers = {
+        'Authorization': f"Bearer {jwtToken}",
+        'Content-Type': 'application/json'
+    }
+    get_user_url = f"https://graph.microsoft.com/v1.0/users?$filter=employeeid eq '{employeeId}'"  
+    response = requests.get(get_user_url, headers=headers)
+    user_data = response.json()
+    user_id = user_data.get("value", [{}])[0].get("id")
+    presence_endpoint = 'https://graph.microsoft.com/v1.0/users/{user_id}/presence'  
+    response = requests.get(presence_endpoint.replace("{user_id}", user_id), headers=headers)
+    presence_data = response.json()
+    formatted_presence_data = {
+        "Display Name": user_data.get("value", [{}])[0].get("displayName"),
+        "Is Out Of Office": presence_data.get("outOfOfficeSettings", {}).get("isOutOfOffice"),
+        "Availability": presence_data.get("availability"),
+        "Activity": presence_data.get("activity"),
+    }
+    return formatted_presence_data
+
+
+@mcp.tool()
 def get_employeeInfo(employeeId : str, saltdata : str, keydata : str)-> str:
     """
     Fetch Employee Info
