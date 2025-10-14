@@ -11,6 +11,7 @@ from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from msal import ConfidentialClientApplication 
+import json
 
 dotenv.load_dotenv()
 mcp = FastMCP("My MCP Server")
@@ -111,7 +112,7 @@ def get_employeeInfo(employeeId : str, saltdata : str, keydata : str)-> str:
     get_user_url = f"https://graph.microsoft.com/v1.0/users?$filter=employeeid eq '{employeeId}'"  
     response = requests.get(get_user_url, headers=headers)
     user_data = response.json()
-    return user_data.get("value", [{}])[0]
+    return json.dumps(user_data.get("value", [{}])[0])
 
 @mcp.tool()
 def get_branches(username: str , token: str , repo_name : str) -> list:
