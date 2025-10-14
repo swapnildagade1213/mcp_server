@@ -10,6 +10,7 @@ import base64
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from msal import ConfidentialClientApplication 
 
 dotenv.load_dotenv()
 mcp = FastMCP("My MCP Server")
@@ -40,6 +41,13 @@ def decrypt_text(encrypted_text, key):
     decrypted_text = cipher.decrypt(encrypted_text)
     return decrypted_text.decode()
 
+def get_DecryptedText(encrypted_text,salt_b64,password) :
+    salt = base64.urlsafe_b64decode(salt_b64)
+    key, _ = generate_key_from_password(password, salt)
+    encrypted_data = base64.urlsafe_b64decode(encrypted_text)
+    decrypted_data = decrypt_text(encrypted_data, key)
+    return decrypted_data
+
 @mcp.tool()
 def get_companycode()-> str:
     """
@@ -53,23 +61,35 @@ def get_companycode()-> str:
     return "#123$787823"
 
 @mcp.tool()
-def fetch_clientId(saltdata : str, keydata : str)-> str:
+def fetch_graphToken(saltdata : str, keydata : str)-> str:
     """
-    Fetch client id
+    Fetch Graph Token
     
     Args:
         saltdata (str): saltdata
         keydata (str): keydata      
         
     Returns:
-        str: client id
+        str: JWTToken
     """
-    cid = "Z0FBQUFBQm83SlZyeURnNFY3UkZPb1ZjWDd5MThaVWc5WG43VEZNSVZpdVVzR2JMOEFKUWl3Y0lmcXg0T1ByWXpRVExEOFdnNEJ2TXZadmVwTFhjcWgzLVdVb1JONkl3YU5LZEhxMjEtbkxDYTdIaGZmRVBZZm9tckZMWWRIQmJFaloyYktzdXVVMWI="
-    encrypted_data = base64.urlsafe_b64decode(cid)
-    salt = base64.urlsafe_b64decode(saltdata)
-    key, _ = generate_key_from_password(keydata, salt)
-    decrypted_clientId = decrypt_text(encrypted_data, key)
-    return decrypted_clientId
+    client_id = "Z0FBQUFBQm83Y3JUUUFTd1JUN3A2YndQa2JCdHZadDhlUV8zcmZPYWc2ZnFkSlNEWlRqc1hjeEVpSE0wZzNPTlVUU0h2Uk0xMzNjaDdIN2EzR3M0Rm5uM0ZEUVU0NTYwc2xwUUR1OVBqQ2o0UHFfTFdONjdNOEFDczRwVjFNakpnTnNWaHRjNlVPbGQ="
+    client_secret = "Z0FBQUFBQm83Y3JURk9VZHZ1OXJpLWdmQmZ4RWs5dzhhMWZSMzRDT0puSHZsdnlmcm9wOHY3OE9ON2xYeWhOSmhzTUxOVXhIbDI3cmYxS1F0LV81OFcwd3ByUnNoelJIc0l3UGpncFB6MmVXYmtSbjluejIyVzQwLU1abXZEUmh6b0FaRC1nQ2p5LU0="
+    tenant_id = "Z0FBQUFBQm83Y3JUelJ5d1pFTDE0c3MzWWgyd0FpXzNoLS1nZE45Q0psREpDYmI5SFlNSm1zd0dzdUFDWERhdndDYWRYdTBjMkRLa0NKQU91NVYxU2lYZ1VLaDg3NTJDekhWQzNiY0ZjRHpGbUZ2TktXZmdXNWpJUkJJX2IwbXI3a3A2U1I5LVdoUDA="
+    client_id = get_DecryptedText(client_id,saltdata,keydata)
+    client_secret = get_DecryptedText(client_secret,saltdata,keydata)
+    tenant_id = get_DecryptedText(tenant_id,saltdata,keydata)
+    authority = f'https://login.microsoftonline.com/{tenant_id}'
+    scope = ['https://graph.microsoft.com/.default']
+    app = ConfidentialClientApplication(
+        client_id,
+        authority=authority,
+        client_credential=client_secret
+    )
+    token_response = app.acquire_token_for_client(scopes=scope)
+    if 'access_token' in token_response:
+        return f"Token : {token_response['access_token']}"
+    else:
+        return f"Token not reterived"
 
 @mcp.tool()
 def get_branches(username: str , token: str , repo_name : str) -> list:
