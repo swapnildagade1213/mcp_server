@@ -108,6 +108,7 @@ async def get_userUpcomingMeetings(email: str, days : int, saltdata : str, keyda
     tenant_id = "Z0FBQUFBQnBBZExWdkJhSnI3V0lJbWN6OHc3QVJqRFZ6Z1dsYWptenpRVHJLNWhTZUlMSGRLRUsza1BEci1DakdjLUhGRDdpR0F2azFkaWFPWWo2SUZ5cjVwTXF2X3RpWUNxTjdHWHVNRWlvRnRsNy1hOTd4RFZzRHo5LU9hel9seWZiZlVyaEtBMVk="
     client_id = get_DecryptedText(client_id,saltdata,keydata)
     client_secret = get_DecryptedText(client_secret,saltdata,keydata)
+    tenant_id = get_DecryptedText(tenant_id,saltdata,keydata)
     authority = f'https://login.microsoftonline.com/{tenant_id}'
     scope = ['https://outlook.office365.com/.default']
 
