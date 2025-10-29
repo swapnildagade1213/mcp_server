@@ -89,7 +89,7 @@ def get_companycode()-> str:
     Returns:
         str: company code
     """
-    return "#33$234#12"
+    return "#123"
 
 @mcp.tool()
 def get_employeePresence(employeeId : str, saltdata : str, keydata : str)-> Dict[str, Any]:
