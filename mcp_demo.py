@@ -105,7 +105,7 @@ async def get_userUpcomingMeetings(email: str, saltdata : str, keydata : str ) -
 
     client_id = "Z0FBQUFBQnBBZExWcGxja25NVk11QjdTbWVIS0VrTFRxSms2RTM5UTA2ell5ZGp2UHdTNXlvbTJ4MGx6NkZ4aVNJSXF4bm9ZRDVReXBkQ1B2dFpqVHBJNjlGaWZhYWFhdm8zRzk0aWdrZl82MnVIaTVPMU5JMlJnN1gzLWhjbkpJTlhQam9vc04zeHU="
     client_secret = "Z0FBQUFBQnBBZExWZ0Q0em1Tci1IU2VhUTJNS2dJaUxTZ0Mxb2RubXpLeUNNMWNxOFZHSDI2TUdhMktEMmJid1NWWVVqeXBub21NellCZ3VHVHBOeGgxeVRCeGlnMURjUTRwZGdBcm5velpJaUsxVmVON3hPT0sxWXNOdlRJR01ubnllVVVRYU45eWk="
-    tenant_id = "Z0FBQUFBQnBBZExWdkJhSnI3V0lJbWN6OHc3QVJqRFZ6Z1dsYWptenpRVHJLNWhTZUlMSGRLRUsza1BEci1DakdjLUhGRDdpR0F2azFkaWFPWWo2SUZ5cjVwTXF2X3RpWUNxTjdHWHVNRWlvRnRsNy1hOTd4RFZzRHo5LU9hel9seWZiZlVyaEtBMVk="
+    tenant_id = "Z0FBQUFBQm83Y3JUelJ5d1pFTDE0c3MzWWgyd0FpXzNoLS1nZE45Q0psREpDYmI5SFlNSm1zd0dzdUFDWERhdndDYWRYdTBjMkRLa0NKQU91NVYxU2lYZ1VLaDg3NTJDekhWQzNiY0ZjRHpGbUZ2TktXZmdXNWpJUkJJX2IwbXI3a3A2U1I5LVdoUDA="
     client_id = get_DecryptedText(client_id,saltdata,keydata)
     client_secret = get_DecryptedText(client_secret,saltdata,keydata)
     tenant_id = get_DecryptedText(tenant_id,saltdata,keydata)
