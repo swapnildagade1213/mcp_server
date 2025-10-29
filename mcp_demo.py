@@ -1,17 +1,21 @@
 # server.py
 from fastmcp import FastMCP
 import requests 
-from typing import Any, Dict
-from datetime import datetime
+from typing import Any, Dict 
 import jwt
 import os
 import dotenv
 import base64
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from msal import ConfidentialClientApplication 
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC 
 import json
+
+from exchangelib import  OAuth2Credentials, Configuration, Account, IMPERSONATION,Identity, Q
+from exchangelib.protocol import BaseProtocol, NoVerifyHTTPAdapter
+from msal import ConfidentialClientApplication
+from datetime import datetime, timedelta, timezone 
+
 
 dotenv.load_dotenv()
 mcp = FastMCP("My MCP Server")
@@ -90,6 +94,49 @@ def get_companycode()-> str:
         str: company code
     """
     return "#123"
+
+@mcp.tool()
+async def get_userUpcomingMeetings(email: str, days : int, saltdata : str, keydata : str ) -> str:
+    """Get upcoming meetings of a user for the next specified days.
+
+    Returns:
+        Upcoming meetings of the user for the next specified days.
+    """ 
+
+    client_id = "Z0FBQUFBQnBBZExWcGxja25NVk11QjdTbWVIS0VrTFRxSms2RTM5UTA2ell5ZGp2UHdTNXlvbTJ4MGx6NkZ4aVNJSXF4bm9ZRDVReXBkQ1B2dFpqVHBJNjlGaWZhYWFhdm8zRzk0aWdrZl82MnVIaTVPMU5JMlJnN1gzLWhjbkpJTlhQam9vc04zeHU="
+    client_secret = "Z0FBQUFBQnBBZExWZ0Q0em1Tci1IU2VhUTJNS2dJaUxTZ0Mxb2RubXpLeUNNMWNxOFZHSDI2TUdhMktEMmJid1NWWVVqeXBub21NellCZ3VHVHBOeGgxeVRCeGlnMURjUTRwZGdBcm5velpJaUsxVmVON3hPT0sxWXNOdlRJR01ubnllVVVRYU45eWk="
+    tenant_id = "Z0FBQUFBQnBBZExWdkJhSnI3V0lJbWN6OHc3QVJqRFZ6Z1dsYWptenpRVHJLNWhTZUlMSGRLRUsza1BEci1DakdjLUhGRDdpR0F2azFkaWFPWWo2SUZ5cjVwTXF2X3RpWUNxTjdHWHVNRWlvRnRsNy1hOTd4RFZzRHo5LU9hel9seWZiZlVyaEtBMVk="
+    client_id = get_DecryptedText(client_id,saltdata,keydata)
+    client_secret = get_DecryptedText(client_secret,saltdata,keydata)
+    authority = f'https://login.microsoftonline.com/{tenant_id}'
+    scope = ['https://outlook.office365.com/.default']
+
+    # Target mailbox to impersonate 
+    # Get access token using MSAL
+    app = ConfidentialClientApplication(
+        client_id=client_id,
+        authority=authority,
+        client_credential=client_secret,
+    )
+    result = app.acquire_token_for_client(scopes=scope)
+
+    if "access_token" not in result:
+        raise Exception("Could not obtain access token")
+    
+    credentials = OAuth2Credentials(client_id=client_id, client_secret=client_secret, tenant_id=tenant_id, identity=Identity(primary_smtp_address=email))
+    config = Configuration(credentials=credentials, server='outlook.office365.com', auth_type='OAuth 2.0')
+    account = Account(primary_smtp_address=email, config=config, autodiscover=False, access_type=IMPERSONATION)
+
+    start = datetime.now(timezone.utc)
+    end = start + timedelta(days=days)
+
+    calendar_items = account.calendar.view(start=start, end=end).only('subject')
+    meetings = []
+    for item in calendar_items:
+        meetings.append({
+            "subject": item.subject
+        })
+    return json.dumps(meetings)
 
 @mcp.tool()
 def get_employeePresence(employeeId : str, saltdata : str, keydata : str)-> Dict[str, Any]:
