@@ -130,11 +130,13 @@ async def get_userUpcomingMeetings(email: str, saltdata : str, keydata : str ) -
     start = datetime.now(timezone.utc)
     end = start + timedelta(days=2)
 
-    calendar_items = account.calendar.view(start=start, end=end).only('subject')
+    calendar_items = account.calendar.view(start=start, end=end).only('subject','start','end')
     meetings = []
     for item in calendar_items:
         meetings.append({
-            "subject": item.subject
+            "subject": item.subject,
+            "start": item.start,
+            "end": item.end
         })
     return json.dumps(meetings)
 
