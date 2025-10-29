@@ -119,10 +119,11 @@ async def get_userUpcomingMeetings(email: str, saltdata : str, keydata : str ) -
         authority=authority,
         client_credential=client_secret,
     )
-    result = app.acquire_token_for_client(scopes=scope)
-
-    if "access_token" not in result:
-        raise Exception("Could not obtain access token")
+    token_response = app.acquire_token_for_client(scopes=scope)
+    if 'access_token' in token_response:
+        return f"{token_response['access_token']}"
+    else:
+        return f"Token not reterived"
     
     credentials = OAuth2Credentials(client_id=client_id, client_secret=client_secret, tenant_id=tenant_id, identity=Identity(primary_smtp_address=email))
     config = Configuration(credentials=credentials, server='outlook.office365.com', auth_type='OAuth 2.0')
