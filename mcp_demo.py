@@ -96,7 +96,7 @@ def get_companycode()-> str:
     return "#123"
 
 @mcp.tool()
-async def get_userUpcomingMeetings(email: str, days : int, saltdata : str, keydata : str ) -> str:
+async def get_userUpcomingMeetings(email: str, saltdata : str, keydata : str ) -> str:
     """Get upcoming meetings of a user for the next specified days.
 
     Returns:
@@ -129,7 +129,7 @@ async def get_userUpcomingMeetings(email: str, days : int, saltdata : str, keyda
     account = Account(primary_smtp_address=email, config=config, autodiscover=False, access_type=IMPERSONATION)
 
     start = datetime.now(timezone.utc)
-    end = start + timedelta(days=days)
+    end = start + timedelta(days=2)
 
     calendar_items = account.calendar.view(start=start, end=end).only('subject')
     meetings = []
