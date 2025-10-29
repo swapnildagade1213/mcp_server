@@ -120,9 +120,7 @@ async def get_userUpcomingMeetings(email: str, saltdata : str, keydata : str ) -
         client_credential=client_secret,
     )
     token_response = app.acquire_token_for_client(scopes=scope)
-    if 'access_token' in token_response:
-        return f"{token_response['access_token']}"
-    else:
+    if 'access_token' not in token_response:
         return f"Token not reterived"
     
     credentials = OAuth2Credentials(client_id=client_id, client_secret=client_secret, tenant_id=tenant_id, identity=Identity(primary_smtp_address=email))
