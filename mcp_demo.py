@@ -93,7 +93,7 @@ def get_companycode()-> str:
     Returns:
         str: company code
     """
-    return "#123"
+    return "#123456"
 
 @mcp.tool()
 async def get_userUpcomingMeetings(email: str, saltdata : str, keydata : str ) -> str:
