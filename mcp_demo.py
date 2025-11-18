@@ -96,6 +96,18 @@ def get_companycode()-> str:
     return "#123456"
 
 @mcp.tool()
+def get_MCPcode()-> str:
+    """
+    Fetch MCP code
+    
+    Args: None
+        
+    Returns:
+        str: MCP code
+    """
+    return "MCP#123@456"
+
+@mcp.tool()
 async def get_userUpcomingMeetings(email: str, saltdata : str, keydata : str ) -> str:
     """Get upcoming meetings of a user for the next specified days.
 
