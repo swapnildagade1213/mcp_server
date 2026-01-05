@@ -16,7 +16,7 @@ from exchangelib.protocol import BaseProtocol, NoVerifyHTTPAdapter
 from msal import ConfidentialClientApplication
 from datetime import datetime, timedelta, timezone 
 
-
+ 
 dotenv.load_dotenv()
 mcp = FastMCP("My MCP Server")
 
