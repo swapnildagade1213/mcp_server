@@ -1,0 +1,13 @@
+{
+  "name": "mcp_server",
+  "image": "python:3.11",
+  "commands": {
+    "setup": [
+      "pip install -r requirements.txt"
+    ],
+    "run": [
+      "python server.py"
+    ]
+  },
+  "ports": [3333]
+}
